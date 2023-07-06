@@ -1,35 +1,25 @@
-import express from "express"
-import Movie from "../model/movie.js"
-import { ObjectId } from "mongoose"
-import mongoose from "mongoose"
+import express from "express";
+import Movie from "../model/movie.js";
+import { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 
-const getMovies = async (req, res) => {
-    try {
-        const movies = await Movie.find({})
-        res.status(200).json({ movies: movies })
-    } catch (err) {
-        res.status(400).json({ message: err.message })
-    }
-}
+const getMovies = async () => {
+  try {
+    return await Movie.find({});
+  } catch (err) {
+    throw new Error(err.message);
+  }
+};
 
-//  re {moveiid: }
-//  api/seats/movieId
-const getMovie = async (req, res) => { //movieid
+const getMovie = async (id) => {
 
-    const ObjectId = mongoose.Types.ObjectId;
-    const movieid = req.body.movieid;
+  const ObjectId = mongoose.Types.ObjectId;
 
-    try {
-        const movie = await Movie.findById(new ObjectId(movieid));
+  try {
+    return await Movie.findById(new ObjectId(id));
+  } catch (err) {
+    throw new Error(err.message);
+  }
+};
 
-        if (!movie) {
-            throw new Error("This movie doesn't exist");
-        }
-
-        res.status(200).json({ movie: movie })
-    } catch (err) {
-        res.status(400).json({ message: err.message })
-    }
-}
-
-export { getMovies, getMovie }
+export { getMovies, getMovie };

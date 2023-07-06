@@ -27,6 +27,4 @@ const dataSchema = new mongoose.Schema({
 }, { collection: 'Movies' }
 )
 
-
-
-export default mongoose.model("Movie", dataSchema)
+export default mongoose.model('Movie', dataSchema);
