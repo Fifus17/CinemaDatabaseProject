@@ -1,60 +1,48 @@
-## **Skład grupy:** Filip Dziurdzia, Zofia Lenart, Jakub Barber
 
-### **Technologia:** MongoDB, Node.js, React
+# Database
 
-### **Temat:** Lokalne Kino
-
-**Zofia Lenart**: zlenart@student.agh.edu.pl
-
-**Jakub Barber:** jakubbarber@student.agh.edu.pl
-
-**Filip Dziurdzia:** fdziurdzia@student.agh.edu.pl
-
-# Baza Danych
-
-Baza danych składa się z 5 kolekcji: Movies, Programme, Users, Rooms oraz Prices.
+The database consists of 5 collections: Movies, Programme, Users, Rooms, and Prices.
 
 ![Database Document](Documentation/db-scheme-doc.png)
 
 ## Movies
 
-Kolekcja **Movies** zawiera podstawowe informacje o filmach puszczanych w naszym kinie. Wszystkie dane zostały pobrane za pomocą IMDB API. Przykładowy dokument w kolekcji Movies.
+The **Movies** collection contains basic information about the movies shown in our cinema. All data was obtained using the IMDB API. Here's an example document in the Movies collection.
 
 ![Movies Document](Documentation/movies-doc.png)
 
 ## Programme
 
-Kolekcja **Programme** jest najbardziej rozbudowaną strukturą w naszej bazie. Każdy dokument reprezentuje repertuar na dany tydzień. Zawiera on początek i koniec danego tygodnia oraz obiekt **days** składający się z 7 dni tygodnia. Każdy dzień tygodnia zawiera tablicę **seansów**. Każdy **seans** zawiera podstawowe dane, takie jak **movieid** wskazujący na puszczany wtedy film, początek i koniec seansu, macierz miejsc sygnalizujacych dostępność miejsc oraz tablice biletów kupionych na dany seans.
-
-<!-- ss do poprawy -->
+The **Programme** collection is the most elaborate structure in our database. Each document represents the repertoire for a given week. It contains the start and end of that week, as well as a **days** object consisting of the 7 days of the week. Each day of the week contains an array of **screenings**. Each **screening** includes basic data, such as **movieid** indicating the movie being shown, the start and end of the screening, an array indicating the availability of seats, and an array of tickets purchased for that screening.
 
 ![Programme Document](Documentation/programme-doc.png)
 
 ## Users
 
-Kolekcja **Users** zawiera informacje o użytkownikach, zarówno zarejestrowanych na stronie naszego kina, jak i tych, którzy kupowali bilety jedynie przy użyciu emaila (bez rejestracji). Każdy dokument zawiera podstawowe informacje o użytkowniku takie jak: imię, nazwisko, e-mail, zahashowane hasło, rola oraz tablica biletów. **Bilet** trzymany w userze jest identyczny jak ten trzymany w seansie. Składa się on z kluczy obcych do usera oraz seansu, ceny, typu, miejsca oraz zawiera podstawowe informacje o filmie, na który został on zakupiony.
+The **Users** collection contains information about users, both registered on our cinema's website and those who bought tickets using only email (without registration). Each document contains basic user information such as: name, surname, email, hashed password, role, and an array of tickets. The **Ticket** held in the user is identical to the one held in the screening. It consists of foreign keys to the user and the screening, price, type, seat, and includes basic information about the movie for which it was purchased.
 
 ![Users Document](Documentation/user-doc.png)
 
 ## Rooms
 
-Kolekcja **Rooms** zawiera informacje o salach dostępnych w naszym kinie. Każda sala jest osobnym dokumentem zawierającym numer sali, liczbę rzędów oraz liczbę miejsc w rzędzie.
+The **Rooms** collection contains information about the rooms available in our cinema. Each room is a separate document containing the room number, the number of rows, and the number of seats in a row.
 
 ![Rooms Document](Documentation/room-doc.png)
 
 ## Prices
 
-W kolekcji **Prices** trzymamy ceny biletów normalnych i ulgowych, zarówno dla filmów 2D jak i 3D. Dodatkowo mamy informacje od kiedy obowiązują dane ceny oraz do kiedy były używane. Ceny aktualne posiadają **null** w polu **endtime**.
+
+In the **Prices** collection, we store the prices for regular and discounted tickets, both for 2D and 3D movies. Additionally, we keep track of the valid duration for each price, including its start and end dates. Current prices have **null** in the **endtime** field.
 
 ![Prices Document](Documentation/prices-doc.png)
 
 # Backend
 
-Po stronie backendu zrealizowaliśmy podstawowe funkcje potrzebne do obsługi aplikacji kina. Poniżej zamieściliśmy przykładowe funkcjonalności, które zrealizowaliśmy.
+On the backend, we've implemented essential functions needed to manage a cinema application. Below, we showcase a few functionalities that we've implemented.
 
-## Widoki
+## Views
 
-**Widok biletów użytkownika**
+**User Tickets View**
 
 ```javascript
 const getUserTickets = async (req, res) => {
@@ -73,8 +61,8 @@ const getUserTickets = async (req, res) => {
 };
 ```
 
-**Widok zwracający program obowiązujący dla danej daty z uzupełnionymi referencjami na movieid oraz roomid**\
-Po upewnieniu się, że program istnieje wykonujemy zapytanie i uzupełniamy referencje odpowiednimi obiektami.
+**View returning the program valid for a certain date with filled references to movieid and roomid**\
+After ensuring the program exists, we perform a query and complete the references with the appropriate objects.
 
 ```javascript
 const getSeancesOfTheWeek = async (req, res) => {
@@ -95,9 +83,8 @@ const getSeancesOfTheWeek = async (req, res) => {
 };
 ```
 
-**Widok repertuaru na x zadanych tygodni**\
-Widok repertuaru na x następnych tygodni (x ustalone po stornie backendu).
-W zwracanych obiektach referencje są zastąpione obiekatmi odpowiedniego filmu i pokoju, więc aplikacja dostaje pełen zestaw danych o danym repertuarze.
+**View of the repertoire for x given weeks**\
+View of the repertoire for the next x weeks (x is determined on the backend). In the returned objects, references are replaced with the corresponding movie and room objects, so the application receives a complete set of data about the given repertoire.
 
 ```javascript
 const getProgrammeForXWeeksAheadPopulated = async (
@@ -122,8 +109,8 @@ const getProgrammeForXWeeksAheadPopulated = async (
 };
 ```
 
-**Widok listy sal w naszym kinie**\
-Zapytanie zwraca listę sal kinowych w naszym kinie.
+**View of the list of rooms in our cinema**\
+The query returns a list of cinema rooms in our cinema.
 
 ```javascript
 const getRooms = async (req, res) => {
@@ -136,17 +123,15 @@ const getRooms = async (req, res) => {
 };
 ```
 
-## Procedury
+## Procedures
 
-Podczas implementacji korzystaliśmy z biblioteki mongoose do modelowania warunków integralności/spójności tworzonych dokumentów.
-Poza walidacją mongoose dostarczył nam wiele funkcjonalności upraszczających operacje na bazie mongodb oraz funkcjonalności implementacyjne jak na przykład
-modele oraz metody statyczne na modelach.
+During the implementation, we used the mongoose library for modeling the integrity/coherence conditions of the created documents.
+In addition to mongoose validation, it provided us with many functionalities that simplify operations on the MongoDB database, as well as implementation functionalities such as models and static methods on models.
 
-**Procedura dodania nowego seansu**\
-Upewniamy się o istnieniu programu w danym przedziale czasowym, sprawdzamy czy pokój nie jest okupowany danego dnia o
-konkretnych godzinach oraz czy istnieje movie o podanym id.
+**Procedure for adding a new screening**\
+We ensure the existence of a program within a specific time range, check if the room is not occupied on specific hours of the day, and if a movie with the given ID exists.
 
-Funkcja pomocnicza - trigger sprawdzający czy pokój jest wolny:
+Helper function - trigger checking if the room is available:
 
 ```javascript
 const checkPotentialOverlap = (
@@ -238,9 +223,9 @@ const addSeanse = async (req, res) => {
 };
 ```
 
-**Procedura dodania nowego programu**\
-Upewniamy się, że program zaczyna się w poniedziałek oraz kończy w niedzielę (zerujemy godziny w datach żeby objąć cały tydzień),
-upewniając się wcześniej, że w danym przedziale czasowym nie ma jeszce obowiązującego programu.
+**Procedure for adding a new program**\
+We ensure that the program starts on Monday and ends on Sunday (we set the hours in the dates to zero to cover the entire week),
+making sure beforehand that there is no existing program within the specified time range.
 
 ```javascript
 const addProgramme = async (req, res) => {
@@ -321,9 +306,9 @@ const addProgramme = async (req, res) => {
 };
 ```
 
-**Rejestracja nowego użytkownika**\
-Upewniamy się, czy dany email nie figuruje już w naszej bazie, sprawdzamy, czy dostaliśmy wszystkie dane potrzebne
-do rejestracji, jeśli wszystko się zgadza dodajemy nowego użytkwnia o bazy.
+**Registering a new user**\
+We ensure that the email is not already present in our database, check if we have received all the necessary data for registration,
+and if everything is correct, we add a new user to the database.
 
 ```javascript
 const registerUser = async (req, res) => {
@@ -367,8 +352,8 @@ const registerUser = async (req, res) => {
 };
 ```
 
-**Procedura logowania użytkownika**\
-Kontrola poprawności zahashowanego hasła i podanego przy logowaniu emaila oraz wysłanie informacji zwrotnej do frontendu.
+**User login procedure**\
+Verification of the correctness of the hashed password and the email provided during login, followed by sending feedback to the frontend.
 
 ```javascript
 const loginUser = async (req, res) => {
@@ -404,8 +389,8 @@ const loginUser = async (req, res) => {
 };
 ```
 
-**Dodawanie pokoju**\
-Dodawanie pokoju o zadanych parametrach (rows, cols) i numerze, po uwczesnym upewnieniu się, że w naszym kinie nie ma już sali o takim numerze.
+**Adding a room**\
+Adding a room with the specified parameters (rows, cols) and number, after ensuring that there is no existing room with the same number in our cinema.
 
 ```javascript
 const addRoom = async (req, res) => {
@@ -427,11 +412,11 @@ const addRoom = async (req, res) => {
 };
 ```
 
-**Procedura dodania biletu**\
-Jest to dosyć duża obszernościwo procedura, więc zaprezentujemy tutaj jej urywki.
+**Procedure for adding a ticket**\
+This procedure is quite extensive, so we will present excerpts here.
 
-W celu zwracania odpowiedniej odpowiedzi do frontendu zamiast movieid/roomid w danym miejscu dodajemy cały model dzięki mongoose'owemu populate.
-Stworzyliśmy naszą statyczną metodę na modelu, która używając populate podmienia id na dane w każdym seansie.
+In order to return the appropriate response to the frontend, instead of movieid/roomid, we use the entire model by using mongoose's populate feature at that specific location.
+We have created our static method on the model, which uses populate to replace the IDs with data in each screening.
 
 ```javascript
 programmeSchema.statics.populateQuery = async function (
@@ -457,8 +442,8 @@ programmeSchema.statics.populateQuery = async function (
 };
 ```
 
-Aby dodać bilety równocześnie do kolekcji Users i Programmes używamy transakcji, wykorzystujemy to samo id biletu,
-dzięki użyciu transakcji jeśli jedno dodanie się nie powiedzie, po prostu abortujemy całość.
+To add tickets simultaneously to the Users and Programmes collections, we use transactions. We utilize the same ticket ID.
+By using transactions, if one of the additions fails, we simply abort the entire process.
 
 ```javascript
 seanseFound.seats[row].seats[col].availability = false;
