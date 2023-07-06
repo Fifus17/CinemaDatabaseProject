@@ -12,9 +12,21 @@ const typeDefs = gql`
     backdrops: [String]
   }
 
+  type Room {
+    id: ID!
+    number: Int!
+    rows: Int!
+    cols: Int!
+  }
+
   type Query {
+    # Movies
     getMovies: [Movie]
     getMovie(id: ID!): Movie
+
+    # Rooms
+    getRooms: [Room]
+    getRoom(number: Int!): Room
   }
 `;
 

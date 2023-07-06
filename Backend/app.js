@@ -14,6 +14,7 @@ import dotenv from "dotenv";
 import  { ApolloServer, gql } from "apollo-server";
 import mongoose from "mongoose";
 import Movie from './model/movie.js';
+import Room from './model/room.js';
 import typeDefs from './graphql/typeDefs.js';
 import resolvers from './graphql/resolvers.js';
 
@@ -42,21 +43,3 @@ const server = new ApolloServer({ typeDefs, resolvers });
 server.listen().then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
 });
-
-// const app = express();
-// app.use(cors());
-
-// app.use(express.json());
-
-// app.use("/api/users", userRouter)
-// app.use("/api/programmes", programmeRouter)
-// app.use("/api/rooms", roomRouter)
-// app.use("/api/tickets", ticketRouter)
-// app.use("/api/movies", moviesRouter)
-// app.use("/api/price", priceRouter)
-
-
-// app.listen(8000, function () {
-//   console.log("The server was started on port 8000");
-//   console.log('To stop the server, press "CTRL + C"');
-// });
