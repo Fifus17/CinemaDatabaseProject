@@ -2,30 +2,30 @@ import mongoose, { mongo } from "mongoose";
 
 const dataSchema = new mongoose.Schema({
   normal: {
-    "2d": {
+    "_2d": {
       required: true,
       type: Number
     },
-    "3d": {
+    "_3d": {
       required: true,
       type: Number
     }
   },
   student: {
-    "2d": {
+    "_2d": {
       required: true,
       type: Number
     },
-    "3d": {
+    "_3d": {
       required: true,
       type: Number
     }
   },
-  startdate: {
+  startime: {
     required: true,
     type: Date
   },
-  enddate: {
+  endtime: {
     required: true,
     type: Date
   }

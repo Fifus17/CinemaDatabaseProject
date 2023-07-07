@@ -19,6 +19,19 @@ const typeDefs = gql`
     cols: Int!
   }
 
+  type PriceType {
+    _3d: Int,
+    _2d: Int
+  }
+
+  type Prices {
+  id: ID!,
+  normal: PriceType,
+  student: PriceType,
+  startime: String,
+  endtime: String
+  }
+
   type Query {
     # Movies
     getMovies: [Movie]
@@ -27,6 +40,9 @@ const typeDefs = gql`
     # Rooms
     getRooms: [Room]
     getRoom(number: Int!): Room
+
+    # Prices
+    getPrices: Prices
   }
 `;
 

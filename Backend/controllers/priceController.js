@@ -1,17 +1,13 @@
-import Price from "../model/price.js"
+import Price from "../model/price.js";
 
 const getPriceList = async (req, res) => {
   try {
-    const priceList = await Price.findOne({ endtime: null })
-    if (!priceList) {
-      throw new Error("Current priceList is not specified")
-    }
-    const tariff = { normal: priceList.normal, student: priceList.student }
-    res.status(200).json({ priceList: tariff })
+    return await Price.findOne({ endtime: null });
+  } catch (err) {
+    throw new Error(err.message);
   }
-  catch (err) {
-    req.status(404).json({ message: err.message })
-  }
-}
+};
 
-export { getPriceList }
+// remember to convert toISOString on frontend
+
+export { getPriceList };
