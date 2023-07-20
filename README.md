@@ -1,3 +1,6 @@
+# Work in Progress :construction:
+
+🚧 Implementing GraphQL 🚀
 
 # Database
 
